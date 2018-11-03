@@ -18,6 +18,8 @@
         </style>
         <link rel="stylesheet" href="{% static 'css/bootstrap-theme.min.css' %}">
         <link rel="stylesheet" href="{% static 'css/main.css' %}">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+              integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
 
         <script src="{% static 'js/vendor/modernizr-2.8.3-respond-1.4.2.min.js' %}"></script>
     </head>
@@ -31,16 +33,21 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Typonator</a>
+            <a class="navbar-brand" href="#"><i class="fa fa-book-dead" style="font-size: 1.25em;"></i>  Typonator</a>
         </div>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="navbar-nav text-uppercase ml-auto">
-              <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#link1">Link 1</a></li>
-          </ul>
+        <div id="navbar-nav" class="navbar-collapse navbar-right collapse ">
+            <a class="navbar-text text-primary" href="{% url 'new_submission' %}"><strong>New File</strong></a>
+            <a class="navbar-text" href="{% url 'home' %}">Files</a></li>
+            {% if user.is_authenticated %}
+                <span class="navbar-text">Hello, {{ user.username }}!</span>
+                <a class="navbar-text " href="{% url 'user_logout' %}">Log out</a>
+            {% else %}
+                <a class="navbar-text" href="{% url 'user_login' %}">Log in</a>
+            {% endif %}
+
         </div><!--/.navbar-collapse -->
       </div>
     </nav>
-
     {% block content %}
     {% endblock %}
 
