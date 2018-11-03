@@ -2,11 +2,11 @@
 
 {%  block title %}Login{% endblock %}
 {% block content %}
-    <form role="form" action="login" method="POST">
+    <form id="loginForm" role="form" action="login" method="POST">
         {% csrf_token %}
         <p>Please login</p>
         {{ form }}
-        <button type="submit" class="btn btn-primary">Log In</button>
+        <button id="btnSubmit" type="submit" class="btn btn-primary">Log In</button>
     </form>
 
 {% endblock %}

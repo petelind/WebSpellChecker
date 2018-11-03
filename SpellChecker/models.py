@@ -8,7 +8,6 @@ class DocumentsQuerySet(models.QuerySet):
         assert isinstance(user, User)
         return self.filter(user=user)
 
-
 class Document(models.Model):
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=1024, blank=True)

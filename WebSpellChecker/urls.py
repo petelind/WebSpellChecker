@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
-from SpellChecker.views import welcome, home, model_form_upload
+from SpellChecker.views import welcome, home, model_form_upload, download
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,5 +25,6 @@ urlpatterns = [
     path('login', LoginView.as_view(template_name='login_form.html'), name='user_login'),
     path('logout', LogoutView.as_view(), name='user_logout'),
     path('home', home, name='home'),
-    path('new', model_form_upload, name='new_submission')
+    path('new', model_form_upload, name='new_submission'),
+    path('download/<path:path>', download, name='download')
 ]

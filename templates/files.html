@@ -2,6 +2,31 @@
 {% block header %}SpellChecker - Your Files{% endblock %}
 
 {% block content %}
-
-    Your files:
+<div class="row">
+    <div>
+        <a id="btnNewSubmission" class="btn btn-primary" href="{% url 'new_submission' %}">Upload File</a>
+    </div>
+    <div id="documentsContainer">
+        <table id="listDocuments" class="table table-striped table-bordered table-condensed mt-5">
+        <thead>
+            <th>Document Name</th>
+            <th>Description</th>
+            <th>File</th>
+            <th>Date Submitted</th>
+            <th>Actions</th>
+        </thead>
+        <tbody>
+            {% for document in documents %}
+            <tr>
+                <td>{{document.name}}</td>
+                <td>{{document.description}}</td>
+                <td>{{document.document}}</td>
+                <td>{{document.uploaded_at}}</td>
+                <td><a href="{% url 'download' path=document.document%}">Download</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    </div>
+</div>
 {% endblock %}
