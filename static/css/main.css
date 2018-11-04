@@ -4,14 +4,19 @@
    Author's custom styles
    ========================================================================== */
 .pt-5 {
-   padding-top: 15px !important;
+   padding-top: 5px !important;
 }
 
 .mt-5 {
-    margin-top: 15px !important;
+    margin-top: 5px !important;
 }
 
-
+.m-5 {
+    margin-top: 5px !important;
+    margin-right: 5px !important;
+    margin-left: 5px !important;
+    margin-bottom: 5px !important;
+}
 
 
 

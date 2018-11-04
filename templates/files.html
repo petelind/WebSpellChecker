@@ -2,13 +2,14 @@
 {% block header %}SpellChecker - Your Files{% endblock %}
 
 {% block content %}
-<div class="row">
+<body>
+<div class="row mt-5">
     <div>
-        <a id="btnNewSubmission" class="btn btn-primary" href="{% url 'new_submission' %}">Upload File</a>
+        <a id="btnNewSubmission" class="btn btn-primary m-5" href="{% url 'new_submission' %}">Upload File</a>
     </div>
     <div id="documentsContainer">
-        <table id="listDocuments" class="table table-striped table-bordered table-condensed mt-5">
-        <thead>
+        <table id="listDocuments" class="table table-striped table-condensed mt-5">
+        <thead class="">
             <th>Document Name</th>
             <th>Description</th>
             <th>File</th>
@@ -29,4 +30,5 @@
         </table>
     </div>
 </div>
+</body>
 {% endblock %}

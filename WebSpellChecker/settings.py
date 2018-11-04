@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'SpellChecker.apps.SpellcheckerConfig',
+    'crispy_forms'
 ]
 
 MIDDLEWARE = [
@@ -124,7 +125,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'SpellChecker/../static')
 ]
 
-LOGIN_URL = 'login'
+LOGIN_URL = 'user_login'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'welcome'
 
+CRISPY_TEMPLATE_PACK='bootstrap3'

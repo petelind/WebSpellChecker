@@ -33,7 +33,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-            <a class="navbar-brand" href="#"><i class="fa fa-book-dead" style="font-size: 1.25em;"></i>  Typonator</a>
+            <a class="navbar-brand" href="{% url 'welcome'%}"><i class="fa fa-book-dead" style="font-size: 1.25em;"></i>  Typonator</a>
         </div>
         <div id="navbar-nav" class="navbar-collapse navbar-right collapse ">
             <a class="navbar-text text-primary" href="{% url 'new_submission' %}"><strong>New File</strong></a>
@@ -48,7 +48,7 @@
         </div><!--/.navbar-collapse -->
       </div>
     </nav>
-    <div class="container-fluid" style="margin-top: 5px;">
+    <div class="container-fluid" style="max-width: 96%">
     {% block content %}
     {% endblock %}
     </div>
