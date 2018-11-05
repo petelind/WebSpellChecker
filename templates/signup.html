@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
+{% block header %}Typonator Sign Up{% endblock %}
 {% block content %}
   <p class="lead">Sign up</p>
   <form method="post">
     {% csrf_token %}
     {{ form | crispy }}
-    <button class="btn btn-primary" type="submit">Sign up</button>
+    <button id="submitButton" class="btn btn-primary" type="submit">Sign up</button>
   </form>
 {% endblock %}

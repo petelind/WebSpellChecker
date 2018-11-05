@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'SpellChecker.apps.SpellcheckerConfig',
-    'crispy_forms'
+    'crispy_forms',
+    'behave_django'
 ]
 
 MIDDLEWARE = [
