@@ -15,7 +15,25 @@ import random
 from curses.ascii import isupper
 from re import findall, match, search  # we will use regexp to parse words out of book fed to us
 from collections import Counter  # this class implements what we need - dict with the words & frequencies
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.forms import UserCreationForm
 
+
+def signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return redirect('welcome')
+        else:
+            form = UserCreationForm()
+    else:
+        form = UserCreationForm()
+    return render(request, 'signup.html', {'form': form})
 
 def welcome(request):
     return render(request, 'welcome.html')

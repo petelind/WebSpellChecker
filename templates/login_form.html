@@ -3,9 +3,9 @@
 
 {%  block title %}Login{% endblock %}
 {% block content %}
+    <p class="lead">Please login</p>
     <form id="loginForm" role="form" action="login" method="POST">
         {% csrf_token %}
-        <p>Please login</p>
         {{ form | crispy }}
         <button id="btnSubmit" type="submit" class="btn btn-primary">Log In</button>
     </form>
