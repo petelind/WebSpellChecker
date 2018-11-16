@@ -1,3 +1,4 @@
+from binaryornot.check import is_binary
 from django.core.files.base import ContentFile
 import os
 import mimetypes
@@ -13,7 +14,8 @@ def validate_file_contents(upload: FileField):
     full_tmp_path = os.path.join(settings.MEDIA_ROOT, tmp_path)
     default_storage.save(tmp_path, ContentFile(upload.file.read()))
     result = mimetypes.guess_type(full_tmp_path)
-    if result[0] == 'text/plain':
+    heuristics_result = is_binary(full_tmp_path)
+    if result[0] == 'text/plain' and heuristics_result is False:
         default_storage.delete(full_tmp_path)
         return
     else:

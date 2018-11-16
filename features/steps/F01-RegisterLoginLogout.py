@@ -1,7 +1,5 @@
 from behave import *
-from django.contrib.auth.models import User
 from selenium.webdriver.chrome.webdriver import WebDriver
-from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.common.by import By
 
 use_step_matcher("re")
@@ -19,7 +17,7 @@ def step_impl(context):
     context.password = 'Valid_password1'
 
     context.live_server_url = context.get_url()
-    # context.live_server_url = 'localhost:8000'
+
 
 @given("I'm on the Welcome page")
 def step_impl(context):
