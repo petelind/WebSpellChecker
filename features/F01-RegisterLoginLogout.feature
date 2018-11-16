@@ -6,13 +6,24 @@ Feature: Register, login and logout
   Background:
     Given the user accesses the url Main Landing Page
 
-  Scenario: Navigate to the Sign Up page
+  Scenario: Register New User
     Given I'm on the Welcome page
-    When I click "Register" in the toolbar
-    Then the "Sign Up" Page is opened
+    When I click "signup"
+    Then the "Sign Up" Form is opened saying "Sign up"
     When I enter user name which complies with the validation rules
     When I enter password which complies with the validation rules
-    When I click "Sign Up"
+    When I click "submitButton"
     Then I'm redirected to the "Main" Page
+    And I'm Logged In
 
+  Scenario: Login and Logout as a Valid User
+    Given Valid user exists
+    When I Log in as a valid user
+    Then I'm Logged In
+    When I click "logout"
+    Then I'm logged out
 
+  Scenario: Login as non-existent user
+    When I Log in as an invalid user
+    Then I'm getting message "Please enter a correct username and password. Note that both fields may be case-sensitive."
+    And Cannot access Files
