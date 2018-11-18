@@ -24,6 +24,7 @@ from django.contrib.auth.signals import user_logged_out, user_logged_in, user_lo
 from django.dispatch import receiver
 
 
+
 def signup(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -44,6 +45,9 @@ def signup(request):
     return render(request, 'signup.html', {'form': form})
 
 def welcome(request):
+    logging.basicConfig(level=logging.INFO)
+    logger = TelemetryFactory.create(__name__)
+    logger.info('[ INFO ] Somebody at home page!')
     return render(request, 'welcome.html')
 
 
@@ -89,7 +93,7 @@ def download(request, path):
     if original_document not in all_user_docs:
         logging.basicConfig(level=logging.INFO)
         logger = TelemetryFactory.create(__name__)
-        logger.info("[ SEC ] User " + request.user.username + " is trying to access other user files!")
+        logger.error("[ SEC ] User " + request.user.username + " is trying to access other user files!")
         raise HttpResponseForbidden
     file_path = os.path.join(settings.MEDIA_ROOT, path)
     if os.path.exists(file_path):
@@ -298,7 +302,7 @@ def user_logged_out_callback(sender, request, user, **kwargs):
     logger = TelemetryFactory.create(__name__)
     ip = get_client_ip(request)
     username = request.user.username
-    logger.info('[ INFO ] {} logged out with IP {} '.format(username, ip))
+    logger.error('[ INFO ] {} logged out with IP {} '.format(username, ip))
 
 @receiver(user_logged_in)
 def user_logged_in_callback(sender, request, user, **kwargs):
@@ -306,12 +310,12 @@ def user_logged_in_callback(sender, request, user, **kwargs):
     logger = TelemetryFactory.create(__name__)
     ip = get_client_ip(request)
     username = request.user.username
-    logger.info('[ INFO ] {} logged in with IP {} '.format(username, ip))
+    logger.error('[ INFO ] {} logged in with IP {} '.format(username, ip))
 
 @receiver(user_login_failed)
-def user_logged_out_callback(sender, request, user, **kwargs):
+def user_login_failed_callback(sender, request,  **kwargs):
     logging.basicConfig(level=logging.INFO)
     logger = TelemetryFactory.create(__name__)
     ip = get_client_ip(request)
     username = request.user.username
-    logger.info('[ SEC ] {} login failed from IP {} '.format(username, ip))
+    logger.error('[ SEC ] {} login failed from IP {} '.format(username, ip))
