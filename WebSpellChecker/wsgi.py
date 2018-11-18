@@ -10,6 +10,10 @@ https://docs.djangoproject.com/en/2.1/howto/deployment/wsgi/
 import os
 
 from django.core.wsgi import get_wsgi_application
+import newrelic.agent
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+newrelic.agent.initialize(os.path.join(BASE_DIR, 'newrelic.ini'))
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'WebSpellChecker.settings')
 

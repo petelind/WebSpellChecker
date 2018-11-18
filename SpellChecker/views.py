@@ -1,5 +1,6 @@
+import datetime
 import os
-
+from newrelic import agent
 from django.conf import settings
 from django.db import models
 from django.forms import FileField
@@ -18,7 +19,6 @@ from collections import Counter  # this class implements what we need - dict wit
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 
-
 def signup(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -28,6 +28,7 @@ def signup(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
             login(request, user)
+            agent.record_custom_event('Registration', 'New user just registered: ' + username)
             return redirect('welcome')
         else:
             form = UserCreationForm()
@@ -42,6 +43,7 @@ def welcome(request):
 @login_required
 def home(request):
     if request.user.is_authenticated:
+        agent.record_custom_event('login_success', 'Successful login for ' + request.user)
         user_docs = Document.objects.get_documents_for(request.user)
         return render(request, 'files.html',
                       {'documents': user_docs})
