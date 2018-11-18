@@ -1,5 +1,7 @@
+import logging
 import os
 
+import watchtower
 from django.conf import settings
 from django.db import models
 from django.forms import FileField
@@ -17,6 +19,9 @@ from re import findall, match, search  # we will use regexp to parse words out o
 from collections import Counter  # this class implements what we need - dict with the words & frequencies
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
+from services import TelemetryFactory
+from django.contrib.auth.signals import user_logged_out, user_logged_in, user_login_failed
+from django.dispatch import receiver
 
 
 def signup(request):
@@ -28,6 +33,9 @@ def signup(request):
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
             login(request, user)
+            logging.basicConfig(level=logging.INFO)
+            logger = TelemetryFactory.create(__name__)
+            logger.info("[ INFO ] New user registration: " + username)
             return redirect('welcome')
         else:
             form = UserCreationForm()
@@ -79,7 +87,10 @@ def download(request, path):
     except Document.DoesNotExist:
         raise Http404
     if original_document not in all_user_docs:
-        raise HttpResponseForbidden()
+        logging.basicConfig(level=logging.INFO)
+        logger = TelemetryFactory.create(__name__)
+        logger.info("[ SEC ] User " + request.user.username + " is trying to access other user files!")
+        raise HttpResponseForbidden
     file_path = os.path.join(settings.MEDIA_ROOT, path)
     if os.path.exists(file_path):
         with open(file_path, 'rb') as file_to_serve:
@@ -271,3 +282,36 @@ def spell_check(request, path_to_file):
     destination_file.writelines(corrected_lines)
     os.remove(temp_file)
     return
+
+def get_client_ip(request):
+    # This function is courtesy of https://stackoverflow.com/questions/37618473/
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
+@receiver(user_logged_out)
+def user_logged_out_callback(sender, request, user, **kwargs):
+    logging.basicConfig(level=logging.INFO)
+    logger = TelemetryFactory.create(__name__)
+    ip = get_client_ip(request)
+    username = request.user.username
+    logger.info('[ INFO ] {} logged out with IP {} '.format(username, ip))
+
+@receiver(user_logged_in)
+def user_logged_in_callback(sender, request, user, **kwargs):
+    logging.basicConfig(level=logging.INFO)
+    logger = TelemetryFactory.create(__name__)
+    ip = get_client_ip(request)
+    username = request.user.username
+    logger.info('[ INFO ] {} logged in with IP {} '.format(username, ip))
+
+@receiver(user_login_failed)
+def user_logged_out_callback(sender, request, user, **kwargs):
+    logging.basicConfig(level=logging.INFO)
+    logger = TelemetryFactory.create(__name__)
+    ip = get_client_ip(request)
+    username = request.user.username
+    logger.info('[ SEC ] {} login failed from IP {} '.format(username, ip))

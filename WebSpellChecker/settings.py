@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+from boto3.session import Session
+import watchtower, logging
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -103,6 +105,34 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AWS_ACCESS_KEY_ID = os.environ.get('ACCESS_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('ACCESS_KEY')
+AWS_REGION_NAME = 'us-east-1'
+
+boto3_session = Session(aws_access_key_id=AWS_ACCESS_KEY_ID,
+                        aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+                        region_name=AWS_REGION_NAME)
+
+LOGGING = {
+      'version': 1,
+      'handlers': {
+          'watchtower':  {
+              'level': logging.INFO,
+              'class': 'watchtower.CloudWatchLogHandler',
+              'boto3_session': boto3_session,
+              'log_group': 'Typonator',
+              'stream_name': 'TyponatorLog',
+              'create_log_group': True
+          },
+      },
+      'loggers': {
+          'django': {
+              'handlers': ['watchtower'],
+              'level': logging.INFO,
+              'propagate': True,
+          },
+      }
+  }
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
