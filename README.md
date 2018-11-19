@@ -3,6 +3,6 @@
 
 *How do I run it?*
 
-pip install -r requirements.txt
-
-python manage.py runserver 8000
+1. Do `pip install -r requirements.txt`
+2. Set up 2 environment variables with the AWS key Id & key for the user used to log to AWS CloudWatch: ACCESS_ID and ACCESS_KEY.
+3. Run `python manage.py runserver 8000`
